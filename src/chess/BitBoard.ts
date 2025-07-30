@@ -1354,6 +1354,7 @@ export default class BitBoard {
   }
 
   makeMove(move: Move) {
+
     if(this.checkmate !== null) {
       throw new Error(`${this.checkmate} king Checkmate. Game Over!`)
     }
@@ -1490,7 +1491,6 @@ export default class BitBoard {
   }
 
   searializeStateForRedis(): BitBoardState {
-
     return {
       piecesPosition: encodeBigUint64Array(this.piecesPosition),
       whiteKingMoved: this.whiteKingMoved,

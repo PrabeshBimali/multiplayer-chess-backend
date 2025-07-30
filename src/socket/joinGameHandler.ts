@@ -25,6 +25,8 @@ export async function handleJoinGame(socket: Socket, io: Server) {
           return
         }
 
+        console.log(playerid, gameid)
+
         console.log("player could not join the game")
     } 
     catch(e) {
@@ -50,15 +52,16 @@ export async function handleJoinNewGame(socket: Socket, io: Server) {
         const newPlayerId = crypto.randomUUID()
         game.started = true
         game.player2 = newPlayerId
-        await cacheNewPlayer(`player:${newPlayerId}`, color)
+        await cacheNewPlayer(newPlayerId, color)
         await updateGame(gameid, game)
         socket.join(gameid)
-        socket.to(gameid).emit("new-player-joined")
+        socket.to(gameid).emit("player-joined", {gameid})
         socket.emit("join-success", {gameid, playerid: newPlayerId, color})
+        console.log(`Player ${newPlayerId} joined room ${gameid} with socket ${socket.id}`)
         return
       }
 
-      socket.emit("join-fail")
+      socket.emit("join-fail", {gameid})
 
     } 
     catch(e) {

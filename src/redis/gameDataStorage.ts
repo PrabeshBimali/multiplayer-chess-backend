@@ -25,6 +25,25 @@ export async function cacheGameState(gameid: string, state: GameState) {
   }
 }
 
+export async function updateGameState(gameid: string, gameState: GameState) {
+  if(!gameid) {
+    throw new InvalidParameterError("gameid")
+  }
+
+  if(!gameState) {
+    throw new InvalidParameterError("gameState")
+  }
+
+  const jsonString = JSON.stringify(gameState)
+  const isOk = await redisClient.set(`gameState:${gameid}`, jsonString, {
+    KEEPTTL: true
+  })
+
+  if(!isOk) {
+    throw new CacheSetError(`gameState:${gameid}`)
+  }
+}
+
 export async function retrieveGameState(gameid: string): Promise<GameState> {
 
   if(!gameid) {

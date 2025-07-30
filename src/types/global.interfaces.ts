@@ -1,5 +1,5 @@
-import { PieceColor } from "./global.enums.js"
-import { PreviousMove } from "./global.types.js"
+import { PieceColor, PieceType } from "./global.enums.js"
+import { Position, PreviousMove } from "./global.types.js"
 
 export interface Game {
   player1: string | null,
@@ -18,6 +18,22 @@ export interface GameState {
   checkmate: PieceColor | null,
   previousMove: PreviousMove | null,
   bitBoard: BitBoardState
+}
+
+export interface MoveResult {
+  turn: PieceColor,
+  fen: string,
+  checkmate: PieceColor | null,
+  previousMove: PreviousMove | null
+}
+
+export interface MovePayload {
+  playerid: string
+  gameid: string
+  color: PieceColor
+  type: PieceType
+  from: Position
+  to: Position
 }
 
 export interface BitBoardState {

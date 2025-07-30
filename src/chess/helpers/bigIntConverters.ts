@@ -11,7 +11,7 @@ export function decodeBigUint64(b64: string): bigint {
 
 
 export function encodeBigUint64Array(arr: BigUint64Array): string {
-  return Buffer.from(arr.buffer).toString("base64");
+  return Buffer.from(arr.buffer, arr.byteOffset, arr.byteLength).toString("base64");
 }
 
 export function decodeBigUint64Array(b64: string): BigUint64Array {

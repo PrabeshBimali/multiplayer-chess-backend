@@ -17,15 +17,16 @@ async function joinNewGame(req: Request, res: Response) {
 
     const game: Game = await retrieveAGame(gameid)
     
+
+    // if owner wants to join his own game
+    if(playerid === game.owner && game.player2 === null) {
+      res.status(204).send()
+      return
+    }
+    
     // if user cannot join the game but only watch it
     if(game.started) {
       res.status(403).send()
-      return
-    }
-
-    // if owner wants to join his own game
-    if(playerid === game.owner) {
-      res.status(204).send()
       return
     }
 
@@ -55,8 +56,8 @@ async function joinNewGame(req: Request, res: Response) {
 
 }
 
-router.post("/", (req: Request, res: Response) => {
-  joinNewGame(req, res)
+router.post("/", async (req: Request, res: Response) => {
+  await joinNewGame(req, res)
 })
 
 export default router

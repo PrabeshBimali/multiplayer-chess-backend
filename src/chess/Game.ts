@@ -19,6 +19,9 @@ export default class Game {
   }
 
   moveAPiece(from: Position, to: Position, type: PieceType, color: PieceColor) {
+
+    if(this.checkmate !== null) return
+
     if(this.turn !== color) {
       throw new Error(`Not ${color} Turn`)
     }
@@ -51,6 +54,9 @@ export default class Game {
   }
 
   promoteAPawn(color: PieceColor, type: PieceType) {
+
+    if(this.checkmate !== null) return
+
     if(this.turn !== color) {
       throw new Error(`Not ${color} Turn`)
     }
