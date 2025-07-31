@@ -4,6 +4,7 @@ import { GameState, MovePayload, MoveResult, Player } from "../types/global.inte
 import { retrieveAPlayer, retrieveGameState, updateGameState } from "../redis/gameDataStorage.js";
 import Game from "../chess/Game.js";
 import { ValidMoves } from "../types/global.types.js";
+import { ChessClientError } from "../errors/chessClientErrors.js";
 
 export async function handlePieceMove(socket: Socket, io: Server) {
   socket.on("move", async (payload) => {
@@ -71,6 +72,12 @@ export async function handlePieceMove(socket: Socket, io: Server) {
       io.to(gameid).emit("move-success", moveResult)
 
     } catch(e) {
+
+      if(e instanceof ChessClientError) {
+        socket.emit("move-error", e.message)
+        return
+      }
+
       console.error(e)
     }
   })
