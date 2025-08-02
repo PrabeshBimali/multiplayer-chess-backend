@@ -5,6 +5,7 @@ import cors, { CorsOptions } from 'cors';
 import createGameRoutes from './routers/createGameRoutes.js'
 import joinNewGameRoutes from './routers/joinNewGameRoutes.js'
 import stateRoutes from './routers/stateRoutes.js'
+import chatRoutes from "./routers/chatRouters.js"
 import registerSocketEventHandlers from './socket/registerSocketEventHandlers.js'
 
 
@@ -28,6 +29,7 @@ const io = new Server(httpServer, {
 app.use("/create-game", createGameRoutes)
 app.use("/join-new-game", joinNewGameRoutes)
 app.use("/state", stateRoutes)
+app.use("/chat", chatRoutes)
 
 io.on("connection", async (socket: Socket) => {
   console.log(`User with id: ${socket.id} connected`)

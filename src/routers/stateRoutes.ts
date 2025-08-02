@@ -7,8 +7,6 @@ const router: Router = Router()
 
 async function getGameState(req: Request, res: Response) {
   try {
-    console.log("API hit")
-
     if(!req.query.gameid) {
       res.status(422).send()
       return

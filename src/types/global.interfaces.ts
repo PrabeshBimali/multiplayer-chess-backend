@@ -63,3 +63,9 @@ export interface BitBoardState {
   whiteEnPassantSquares: string
   blackEnPassantSquares: string
 }
+
+export interface ChatData {
+  senderid: string
+  text: string
+  timestamp: number
+}

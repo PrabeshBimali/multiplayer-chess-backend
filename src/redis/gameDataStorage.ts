@@ -1,7 +1,7 @@
 import redisClient from "../config/redisClient.js";
 import { CacheGetError, CacheSetError, InvalidParameterError } from "../errors/redisCacheErrors.js";
 import { PieceColor } from "../types/global.enums.js";
-import { Game, GameState, Player } from "../types/global.interfaces.js";
+import { ChatData, Game, GameState, Player } from "../types/global.interfaces.js";
 
 const GAME_EXPIRATION_TIME = 60 * 60 * 2 // in 2  houts
 
@@ -163,6 +163,69 @@ export async function retrieveAPlayer(playerid: string): Promise<Player> {
   return parsedData
 }
 
+export async function cacheNewChat(gameid: string, chatKey: string, chatData: ChatData) {
+  if(!gameid) {
+    throw new InvalidParameterError("gameid")
+  }
+
+  if(!chatKey) {
+    throw new InvalidParameterError("chatKey")
+  }
+
+  if(!chatData) {
+    throw new InvalidParameterError("chatData")
+  }
+
+  
+  const jsonString = JSON.stringify(chatData)
+  const isOk = await redisClient.rPush(chatKey, jsonString)
+
+  const gameTTL = await redisClient.ttl(`game:${gameid}`)
+
+  if(gameTTL > 0) {
+    await redisClient.expire(chatKey, GAME_EXPIRATION_TIME, "NX")
+  }
+  
+  if(isOk < 1) {
+    throw new CacheSetError(chatKey)
+  }
+}
+
+export async function addNewMessageToChat(chatKey: string, chatData: ChatData) {
+  if(!chatKey) {
+    throw new InvalidParameterError("chatKey")
+  }
+
+  if(!chatData) {
+    throw new InvalidParameterError("chatData")
+  }
+
+  
+  const jsonString = JSON.stringify(chatData)
+  const isOk = await redisClient.rPush(chatKey, jsonString)
+  await redisClient.lTrim(chatKey, 0, 29)
+  
+  if(isOk < 1) {
+    throw new CacheSetError(chatKey)
+  }
+}
+
+export async function retrieveAChat(chatKey: string): Promise<Array<ChatData>> {
+  if(!chatKey) {
+    throw new InvalidParameterError("chatKey")
+  }
+
+  const chatStringList = await redisClient.lRange(chatKey , 0, -1)
+  let chat: Array<ChatData> = []
+  console.log(chatKey)
+
+  for(const msg of chatStringList) {
+    chat.push(JSON.parse(msg) as ChatData)
+  }
+
+  return chat
+}
+
 // deletes game and its players from cache
 export async function deleteAGame(gameid: string, player1id: string | null = null, player2id: string | null = null) {
   if(!gameid) {
@@ -185,4 +248,5 @@ export async function deleteAGame(gameid: string, player1id: string | null = nul
   await redisClient.del(`player:${player2}`)
   await redisClient.del(`game:${gameid}`)
   await redisClient.del(`gameState:${gameid}`)
+  await redisClient.del(`game:${gameid}:chat`)
 }
