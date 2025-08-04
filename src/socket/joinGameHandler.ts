@@ -24,10 +24,6 @@ export async function handleJoinGame(socket: Socket, io: Server) {
           console.log(`Player ${playerid} joined room ${gameid} with socket ${socket.id}`)
           return
         }
-
-        console.log(playerid, gameid)
-
-        console.log("player could not join the game")
     } 
     catch(e) {
       console.error(e)
