@@ -6,7 +6,7 @@
   "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "echo ---FILES--- && ls -R && tsc",
+    "build": "tsc && ls dist",
     "start": "node dist/app.js",
     "dev": "tsx watch src/app.ts"
   },
