@@ -1,15 +1,31 @@
-## REDIS SCHEMA
-* game:id
-    * player1 -> string
-    * player2 -> string
-    * owner: -> string
+## USAGE
 
-* gamestate:id
-    * turn -> string
-    * fen -> string
-    * previousmove -> json
-    * checkmate -> string
+### For Dev 
 
-* bitboard:id
-    * pieces -> string
-    * previouspieces -> string
+```bash
+npm install
+
+# then
+
+npm run dev
+```
+
+### For Prod
+
+```bash
+npm install
+
+# then
+
+npm build
+
+# then
+
+npm start
+
+```
+
+Live Preview: (https://multiplayer-chess-five.vercel.app/)
+
+Frontend URL: (https://github.com/PrabeshBimali/multiplayer-chess)
+
