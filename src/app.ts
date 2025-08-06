@@ -19,7 +19,7 @@ if(dotenvResult.error) {
 const corsOptions: CorsOptions = {
   origin: process.env.FRONTEND_URL
 }
-console.log(process.env.REDIS_URL)
+
 const app = express();
 
 app.use(cors(corsOptions));
