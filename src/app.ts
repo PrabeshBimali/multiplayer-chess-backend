@@ -10,12 +10,13 @@ import chatRoutes from "./routers/chatRouters.js"
 import registerSocketEventHandlers from './socket/registerSocketEventHandlers.js'
 import { APIRateLimit } from './middlewares/rateLimit.js';
 
-const dotenvResult = dotenv.config()
+if(process.env.NODE_ENV === "development") {
+  const dotenvResult = dotenv.config()
 
-if(dotenvResult.error) {
-  throw dotenvResult.error
+  if(dotenvResult.error) {
+    throw dotenvResult.error
+  }
 }
-
 const corsOptions: CorsOptions = {
   origin: process.env.FRONTEND_URL
 }
