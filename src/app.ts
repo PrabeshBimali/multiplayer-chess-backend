@@ -1,3 +1,4 @@
+import dotenv from "dotenv"
 import express from 'express';
 import { createServer } from 'http';
 import { Server, Socket } from 'socket.io';
@@ -9,11 +10,16 @@ import chatRoutes from "./routers/chatRouters.js"
 import registerSocketEventHandlers from './socket/registerSocketEventHandlers.js'
 import { APIRateLimit } from './middlewares/rateLimit.js';
 
+const dotenvResult = dotenv.config()
 
-const corsOptions: CorsOptions = {
-  origin: "http://localhost:3000"
+if(dotenvResult.error) {
+  throw dotenvResult.error
 }
 
+const corsOptions: CorsOptions = {
+  origin: process.env.FRONTEND_URL
+}
+console.log(process.env.REDIS_URL)
 const app = express();
 
 app.use(cors(corsOptions));
@@ -22,7 +28,7 @@ app.use(express.json());
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST"],
   },
 });
