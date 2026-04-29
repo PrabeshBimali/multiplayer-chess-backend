@@ -1,4 +1,4 @@
- # Multiplayer Chat Backend
+ # Multiplayer Chess Backend
 
  ## How to run this Backend Locally 
 
